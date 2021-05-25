@@ -1,10 +1,24 @@
 version: 2
 jobs:
-  build:
+  envvar_test:
     docker:
       - image: cimg/node:lts
     steps:
-      - checkout
-      - run: yarn install
-      - run: yarn test
-      - run: echo "Hello World!!"
+      - run:
+          name: ステップ定義の環境変数を出力する
+          environment:
+            STEP_VARIABLE: "This is step variable"
+          command: echo $STEP_VARIABLE
+      - run:
+          name: プロジェクト設定の環境変数を出力する
+          command: echo $PROJECT_VARIABLE
+      - run:
+          name: コンテキストの環境変数を出力する
+          command: echo $CONTEXT_VARIABLE
+
+workflows:
+  version: 2
+  main:
+    jobs:
+      - envvar_test:
+        context: EXAMPLE_CONTEXT
